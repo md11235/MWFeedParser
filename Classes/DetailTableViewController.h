@@ -33,9 +33,11 @@
 @interface DetailTableViewController : UITableViewController {
 	MWFeedItem *item;
 	NSString *dateString, *summaryString;
+    NSMutableData * receivedData;
 }
 
 @property (nonatomic, retain) MWFeedItem *item;
 @property (nonatomic, retain) NSString *dateString, *summaryString;
+@property (nonatomic, retain) NSMutableData * receivedData;
 
 @end
