@@ -37,14 +37,13 @@ typedef enum { SectionDetailSummary } DetailRows;
 @implementation DetailTableViewController
 
 @synthesize item, dateString, summaryString;
-@synthesize receivedData;
 
 #pragma mark -
 #pragma mark Initialization
 
 - (id)initWithStyle:(UITableViewStyle)style {
     if ((self = [super initWithStyle:style])) {
-		receivedData = [[NSMutableData alloc] init];
+        sayloud = [[Sayloud alloc] init];
     }
     return self;
 }
@@ -80,57 +79,10 @@ typedef enum { SectionDetailSummary } DetailRows;
 }
 
 - (void)requestSayloud {
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
-                                    initWithURL:[NSURL
-                                                 URLWithString:@"http://lh.sayloud.com/tts.py"]];
-    
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"text/plain; charset=UTF-8"
-   forHTTPHeaderField:@"Content-Type"];
-    
     NSString * textContent = [NSString stringWithFormat:@"%@%@", @"vmcpw", summaryString];
-    
-    [request setValue:[NSString stringWithFormat:@"%d", [textContent length]]
-   forHTTPHeaderField:@"Content-Length"];
-    
-    [request setHTTPBody:[textContent dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    [[NSURLConnection alloc]
-     initWithRequest:request
-     delegate:self];
-    
-    NSLog(@"begin to request sayloud\n");
+    [sayloud readText:textContent];
 }
 
-#pragma mark -
-#pragma mark NSURLConnection
-
-/*
- this method might be calling more than one times according to incoming data size
- */
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    [self.receivedData appendData:data];
-}
-/*
- if there is an error occured, this method will be called by connection
- */
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    
-    NSLog(@"%@" , error);
-}
-
-/*
- if data is successfully received, this method will be called by connection
- */
--(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    
-    //initialize convert the received data to string with UTF8 encoding
-    NSString *htmlSTR = [[NSString alloc] initWithData:self.receivedData
-                                              encoding:NSUTF8StringEncoding];
-    NSLog(@"reponse is %@" , htmlSTR);
-    
-    [self.receivedData setLength:0];
-}
 
 #pragma mark -
 #pragma mark Table view data source
@@ -248,7 +200,6 @@ typedef enum { SectionDetailSummary } DetailRows;
 	[dateString release];
 	[summaryString release];
 	[item release];
-    [receivedData release];
     [super dealloc];
 }
 

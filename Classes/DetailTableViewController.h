@@ -29,15 +29,16 @@
 
 #import <UIKit/UIKit.h>
 #import "MWFeedItem.h"
+#import "Sayloud.h"
 
 @interface DetailTableViewController : UITableViewController {
 	MWFeedItem *item;
 	NSString *dateString, *summaryString;
-    NSMutableData * receivedData;
+    
+    Sayloud * sayloud;
 }
 
 @property (nonatomic, retain) MWFeedItem *item;
 @property (nonatomic, retain) NSString *dateString, *summaryString;
-@property (nonatomic, retain) NSMutableData * receivedData;
 
 @end
